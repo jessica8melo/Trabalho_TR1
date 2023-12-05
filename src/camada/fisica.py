@@ -76,3 +76,19 @@ def Manchester(entrada):
             aux_index1+=1
             aux_index2+=1
     return(x,y)
+
+def ASK(entrada):
+    y = [0]*100*len(entrada)
+    x = np.arange(0,len(entrada),.01) 
+
+    for i in range(0,len(entrada)):
+        if entrada[i] == "1":
+            for j in range(1,100):
+                y[(i)*100+j] = 1 * np.sin(2*np.pi*j/100)
+        else:
+            for j in range(1,100):
+                y[(i)*100+j] = 0
+    ## matplot chart / graph
+    fig, ax = plt.subplots()
+    ax.plot(x,y, color='green')
+    return(fig)
