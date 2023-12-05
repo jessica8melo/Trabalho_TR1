@@ -21,3 +21,30 @@ def NRZ_Polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
             y.append(saida)
             aux_index+=1
     return(x,y)
+
+def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
+    x = np.arange(0,len(entrada),.01)   
+    aux_index = 1
+    y = []
+    pulso = True #Define se o bit '1' será positivo ou negativo
+    for i in range(0,len(entrada)*100,1):
+        if x[i]<aux_index:
+            if entrada[aux_index-1] == "1" and pulso:
+                saida = 1
+            elif entrada[aux_index-1] == "1" and not(pulso):
+                saida = -1
+            else:
+                saida = 0
+            y.append(saida)
+        else:
+            if entrada[aux_index] == "1" and not(pulso):
+                saida = 1
+                pulso = not pulso
+            elif entrada[aux_index] == "1" and pulso:
+                saida = -1
+                pulso = not pulso
+            else:
+                saida = 0
+            y.append(saida)
+            aux_index+=1
+    return(x,y)
