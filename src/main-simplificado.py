@@ -16,26 +16,9 @@ def on_activate(app):
     ## matplot chart / graph
     fig, ax = plt.subplots()
 
-    entrada = "1000110"     
-    x = np.arange(0,len(entrada),.01)   
-    j = 1
-    y = []
-    for i in range(0,len(entrada)*100,1):
-        if x[i]<j:
-            if entrada[j-1] == "1":
-                saida = 1
-            else:
-                saida = -1
-            y.append(saida)
-        else:
-            if entrada[j] == "1":
-                saida = 1
-            else:
-                saida = -1
-            y.append(saida)
-            j+=1
-    print(x)
-    ax.plot(x,y, color='green') 
+    x = np.linspace(0, 3, 1500)     # Eixo-x começa em 0 até 3 com 1500 pontos
+    y = np.sin(2*np.pi*x)           # Função / Sinal sendo desenhado
+    ax.plot(x,y, color='green')  
     
     figCanvas = FigureCanvas(fig)
     figCanvas.set_size_request(600,400)

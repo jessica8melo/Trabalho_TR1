@@ -1,6 +1,5 @@
 import numpy as np
-
-entrada = input()
+import matplotlib.pyplot as plt
 
 def NRZ_Polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
     x = np.arange(0,len(entrada),.01)   #Eixo X vai de 0 até
@@ -20,7 +19,10 @@ def NRZ_Polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
                 saida = -1
             y.append(saida)
             aux_index+=1
-    return(x,y)
+    ## matplot chart / graph
+    fig, ax = plt.subplots()
+    ax.plot(x,y, color='green')
+    return(fig)
 
 def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
     x = np.arange(0,len(entrada),.01)   
@@ -47,7 +49,10 @@ def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
                 saida = 0
             y.append(saida)
             aux_index+=1
-    return(x,y)
+    ## matplot chart / graph
+    fig, ax = plt.subplots()
+    ax.plot(x,y, color='green')
+    return(fig)
 
 def Manchester(entrada): 
     x = np.arange(0,len(entrada),.01) 
@@ -75,4 +80,7 @@ def Manchester(entrada):
             y.append(saida)
             aux_index1+=1
             aux_index2+=1
-    return(x,y)
+    ## matplot chart / graph
+    fig, ax = plt.subplots()
+    ax.plot(x,y, color='green')
+    return(fig)
