@@ -48,3 +48,31 @@ def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
             y.append(saida)
             aux_index+=1
     return(x,y)
+
+def Manchester(entrada): 
+    x = np.arange(0,len(entrada),.01) 
+    aux_index1 = 1
+    aux_index2 = 0.5 #Serve para trocar a saída quando chegamos na metade da representação do bit
+    y = []
+    for i in range(0,len(entrada)*100,1):
+        if x[i]<aux_index1: 
+            if x[i]>(aux_index2): #Verifica se a metade da representação do bit já chegou
+                if entrada[aux_index1-1] == "1":
+                    saida = 0
+                else:
+                    saida = 1
+            else:
+                if entrada[aux_index1-1] == "1":
+                    saida = 1
+                else:
+                    saida = 0
+            y.append(saida)
+        else:
+            if entrada[aux_index1] == "1":
+                saida = 1
+            else:
+                saida = 0
+            y.append(saida)
+            aux_index1+=1
+            aux_index2+=1
+    return(x,y)
