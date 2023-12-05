@@ -16,7 +16,7 @@ class MyApp(Gtk.Application):
     # When the application is launched…
     def on_activate(self, app):
         builder = Gtk.Builder()
-        builder.add_from_file("ui/camada.ui")
+        builder.add_from_file("src/ui/camada.ui")
 
         ## matplot chart / graph
         fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=100)
