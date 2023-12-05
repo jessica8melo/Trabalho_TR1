@@ -2,7 +2,7 @@
 <!-- Created with Cambalache 0.17.0 -->
 <interface>
   <!-- interface-name camada.ui -->
-  <requires lib="gtk" version="4.12"/>
+  <requires lib="gtk" version="4.6"/>
   <object class="GtkApplicationWindow" id="mainWindow">
     <property name="icon-name">network-wired</property>
     <property name="title">Camada Física e Enlace</property>
