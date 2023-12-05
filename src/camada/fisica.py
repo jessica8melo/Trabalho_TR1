@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 entrada = input()
 
@@ -77,17 +78,33 @@ def Manchester(entrada):
             aux_index2+=1
     return(x,y)
 
-def ASK(entrada):
+def ASK(entrada): #Quando o bit é igual a '1', a amplitude é 1 e quando é igual a '0', a amplitude é 0
     y = [0]*100*len(entrada)
     x = np.arange(0,len(entrada),.01) 
 
-    for i in range(0,len(entrada)):
+    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e da frequência de entrada
         if entrada[i] == "1":
             for j in range(1,100):
-                y[(i)*100+j] = 1 * np.sin(2*np.pi*j/100)
+                y[(i)*100+j] = 1 * np.sin(2*np.pi*j/100) 
         else:
             for j in range(1,100):
                 y[(i)*100+j] = 0
+    ## matplot chart / graph
+    fig, ax = plt.subplots()
+    ax.plot(x,y, color='green')
+    return(fig)
+
+def FSK(entrada): #Quando o bit é igual a '1', a frequência é 2, já quando o bit for '0', a frequência é 1
+    y = [0]*100*len(entrada)
+    x = np.arange(0,len(entrada),.01) 
+
+    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e das respectivas frequência
+        if entrada[i] == "1":
+            for j in range(1,100):
+                y[(i)*100+j] = 1 * np.sin(2*np.pi*2*j/100)
+        else:
+            for j in range(1,100):
+                y[(i)*100+j] = 1 * np.sin(2*np.pi*j/100)
     ## matplot chart / graph
     fig, ax = plt.subplots()
     ax.plot(x,y, color='green')
