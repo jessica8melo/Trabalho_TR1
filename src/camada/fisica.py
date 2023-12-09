@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def NRZ_Polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
+def nrz_polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
     x = np.arange(0,len(entrada),.01)   #Eixo X vai de 0 até
     aux_index = 1 #Serve para analisar se percorreu-se toda unidade do eixo X antes de ir para o próximo bit de entrada
     y = []
@@ -19,12 +18,9 @@ def NRZ_Polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
                 saida = -1
             y.append(saida)
             aux_index+=1
-    ## matplot chart / graph
-    fig, ax = plt.subplots()
-    ax.plot(x,y, color='green')
-    return(fig)
+    return (x, y)
 
-def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
+def bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
     x = np.arange(0,len(entrada),.01)   
     aux_index = 1
     y = []
@@ -49,12 +45,9 @@ def Bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
                 saida = 0
             y.append(saida)
             aux_index+=1
-    ## matplot chart / graph
-    fig, ax = plt.subplots()
-    ax.plot(x,y, color='green')
-    return(fig)
+    return (x, y)
 
-def Manchester(entrada): 
+def manchester(entrada):
     x = np.arange(0,len(entrada),.01) 
     aux_index1 = 1
     aux_index2 = 0.5 #Serve para trocar a saída quando chegamos na metade da representação do bit
@@ -80,7 +73,4 @@ def Manchester(entrada):
             y.append(saida)
             aux_index1+=1
             aux_index2+=1
-    ## matplot chart / graph
-    fig, ax = plt.subplots()
-    ax.plot(x,y, color='green')
-    return(fig)
+    return (x, y)
