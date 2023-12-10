@@ -1,0 +1,60 @@
+# OS junk
+[Tt]humbs.db
+desktop.ini
+*.DS_Store
+
+# User trash
+to[dD]o.*
+
+# Python rubbish. See https://peps.python.org/pep-0582
+__pycache__
+__pypackages__
+*.py[cod]
+*$py.class
+
+# Editor debris
+*~
+.idea
+.vscode
+\#*#
+.cmb.db
+
+# Application garbage
+*.o
+*.exe
+*.ko
+*.obj
+*.elf
+*.data
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Debug stuff
+*.dSYM
+*.su
+*.idb
+*.pdb
+
+# Environments clutter
+.env
+.venv
+env/
+venv/
+
+# Jupyter residue
+.ipynb_checkpoints
+
+# Building / packaging droppings
+.Python
+build
+_build
+.cache
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+*.log
+MANIFEST
