@@ -18,7 +18,7 @@ def nrz_polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
                 saida = -1
             y.append(saida)
             aux_index+=1
-    return (x, y)
+    return y
 
 def bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
     x = np.arange(0,len(entrada),.01)
@@ -45,7 +45,7 @@ def bipolar(entrada): #Bit '0' é 0 e bit '1' varia entre +-V, sendo |V|=1
                 saida = 0
             y.append(saida)
             aux_index+=1
-    return (x, y)
+    return y
 
 def manchester(entrada):
     x = np.arange(0,len(entrada),.01)
@@ -73,11 +73,10 @@ def manchester(entrada):
             y.append(saida)
             aux_index1+=1
             aux_index2+=1
-    return (x, y)
+    return y
 
 def ask(entrada): #Quando o bit é igual a '1', a amplitude é 1 e quando é igual a '0', a amplitude é 0
     y = [0]*100*len(entrada)
-    x = np.arange(0,len(entrada),.01)
 
     for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e da frequência de entrada
         if entrada[i] == "1":
@@ -86,11 +85,10 @@ def ask(entrada): #Quando o bit é igual a '1', a amplitude é 1 e quando é igu
         else:
             for j in range(1,100):
                 y[(i)*100+j] = 0
-    return (x, y)
+    return y
 
 def fsk(entrada): #Quando o bit é igual a '1', a frequência é 2, já quando o bit for '0', a frequência é 1
     y = [0]*100*len(entrada)
-    x = np.arange(0,len(entrada),.01)
 
     for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e das respectivas frequência
         if entrada[i] == "1":
@@ -99,4 +97,8 @@ def fsk(entrada): #Quando o bit é igual a '1', a frequência é 2, já quando o
         else:
             for j in range(1,100):
                 y[(i)*100+j] = 1 * np.sin(2*np.pi*j/100)
-    return (x, y)
+    return y
+
+def qam_8(entrada):
+    # A fazer: implementar a modulação analógica 8 QAM
+    return [1.2]*100*len(entrada) # apenas para testes (y=1.2)

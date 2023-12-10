@@ -12,31 +12,31 @@ from camada.fisica import *
 from camada.enlace import *
 from enum import Enum, auto
 
+class Enquadramento(Enum):
+    CONTAGEM_CARACTERES = auto()
+    INSERCAO_BITS = auto()
+
+class ModulacaoDigital(Enum):
+    NRZ_POLAR = auto()
+    MANCHESTER = auto()
+    BIPOLAR = auto()
+
+class ModulacaoPortadora(Enum):
+    ASK = auto()
+    FSK = auto()
+    QAM_8 = auto()
+
 class MyApp(Gtk.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)
         self.settings = {
-            self.Enquadramento: self.Enquadramento.CONTAGEM_CARACTERES,
-            self.ModulacaoDigital: self.ModulacaoDigital.NRZ_POLAR,
-            self.ModulacaoPortadora: []
+            Enquadramento: Enquadramento.CONTAGEM_CARACTERES,
+            ModulacaoDigital: ModulacaoDigital.NRZ_POLAR,
+            ModulacaoPortadora: []
         }
 
-    class Enquadramento(Enum):
-        CONTAGEM_CARACTERES = auto()
-        INSERCAO_BITS = auto()
-
-    class ModulacaoDigital(Enum):
-        NRZ_POLAR = auto()
-        MANCHESTER = auto()
-        BIPOLAR = auto()
-
-    class ModulacaoPortadora(Enum):
-        ASK = auto()
-        FSK = auto()
-        _8QAM = auto()
-
-    def on_submit(self, widget):
+    def graph_canvas_update(self, widget):
         txtBuffer = self.entryTemDeBits.get_buffer()
 
         # toDo: enquadramento do trem de bits
@@ -45,54 +45,97 @@ class MyApp(Gtk.Application):
         else:
             txtEnquadrado = txtBuffer.get_text()
 
-        match self.settings[self.ModulacaoDigital]:
-            case self.ModulacaoDigital.NRZ_POLAR:
-                (x, y) = nrz_polar(txtEnquadrado)
-            case self.ModulacaoDigital.MANCHESTER:
-                (x, y) = manchester(txtEnquadrado)
-            case self.ModulacaoDigital.BIPOLAR:
-                (x, y) = bipolar(txtEnquadrado)
+        # Calc digital modulation
+        match self.settings[ModulacaoDigital]:
+            case ModulacaoDigital.NRZ_POLAR:
+                yMD = nrz_polar(txtEnquadrado)
+            case ModulacaoDigital.MANCHESTER:
+                yMD = manchester(txtEnquadrado)
+            case ModulacaoDigital.BIPOLAR:
+                yMD = bipolar(txtEnquadrado)
+
+        # Calc analog modulation
+        for item in self.settings[ModulacaoPortadora]:
+            match item:
+                case ModulacaoPortadora.ASK:
+                    yASK = ask(txtEnquadrado)
+                case ModulacaoPortadora.FSK:
+                    yFSK = fsk(txtEnquadrado)
+                case ModulacaoPortadora.QAM_8:
+                    yQAM_8 = qam_8(txtEnquadrado)
+
+        # Define the x-axis for all axes (graphs)
+        x = np.arange(0,len(txtEnquadrado),.01)
 
         # Check if "fig" is defined on self
-        if not hasattr(self, "fig"):
-            self.fig = Figure(dpi=100)
-            self.axModulacaoDigital = self.fig.add_subplot()
-            self.axModulacaoDigital.sharex=True
-
-            self.line2d = self.axModulacaoDigital.plot(x, y)
-            self.fig.suptitle("Modulação digital")
-
-            figCanvas = FigureCanvas(self.fig)
-            figCanvas.set_size_request(600,400)
-            navBar = NavigationToolbar(figCanvas)
-
-            self.boxPreview.append(figCanvas)
-            self.boxPreview.append(navBar)
-        else:
+        if hasattr(self, "fig"):
+            # Clear graphs axes
             self.axModulacaoDigital.clear()
-            self.axModulacaoDigital.plot(x, y)
+            self.axModulacaoPortadora.clear()
+
+            self.axModulacaoDigital.set_title("Digital")
+            self.axModulacaoPortadora.set_title("Analógica")
+            self.axModulacaoDigital.sharex = True
+            self.axModulacaoPortadora.sharex = True
+
+            # Make sure variable is defined locally and
+            # has a value. Then, plot on axes
+            if "yMD" in locals() and yMD is not None:
+                self.axModulacaoDigital.plot(x, yMD)
+            if "yASK" in locals() and yASK is not None:
+                self.axModulacaoPortadora.plot(x, yASK)
+            if "yFSK" in locals() and yFSK is not None:
+                self.axModulacaoPortadora.plot(x, yFSK)
+            if "yQAM_8" in locals() and yQAM_8 is not None:
+                self.axModulacaoPortadora.plot(x, yQAM_8)
+
+            # Draw changes on axes into canvas
             self.fig.canvas.draw()
 
     def on_toggle_enquadramento(self, widget, tipoEnquadramento):
-        self.settings[self.Enquadramento] = tipoEnquadramento
-        print(self.settings[self.Enquadramento])
+        self.settings[Enquadramento] = tipoEnquadramento
+        self.graph_canvas_update(widget)
 
     def on_toggle_mDigital(self, widget, tipoModulacao):
-        self.settings[self.ModulacaoDigital] = tipoModulacao
+        self.settings[ModulacaoDigital] = tipoModulacao
+        self.graph_canvas_update(widget)
 
     def on_toggle_mPortadora(self, widget, tipoModulacao):
-        if tipoModulacao not in self.settings[self.ModulacaoPortadora]:
-            self.settings[self.ModulacaoPortadora].append(tipoModulacao)
+        if tipoModulacao not in self.settings[ModulacaoPortadora]:
+            self.settings[ModulacaoPortadora].append(tipoModulacao)
         else:
-            self.settings[self.ModulacaoPortadora].remove(tipoModulacao)
-        print(self.settings[self.ModulacaoPortadora])
+            self.settings[ModulacaoPortadora].remove(tipoModulacao)
+        self.graph_canvas_update(widget)
+
+    def graph_canvas_show(self):
+        # Check if "fig" is defined on self
+        if hasattr(self, "fig"):
+            return
+
+        # Create a new figure with 100 dots per inch
+        # and set a subscript title
+        self.fig = Figure(dpi=100)
+        self.fig.suptitle("Modulações")
+        self.fig.subplots_adjust(hspace=.6)
+
+        # Define a new axes to plot digital modulation
+        self.axModulacaoDigital = self.fig.add_subplot(2, 1, 1)
+        # Define a new axes to plot analog modulation
+        self.axModulacaoPortadora = self.fig.add_subplot(2, 1, 2)
+
+        figCanvas = FigureCanvas(self.fig)
+        figCanvas.set_size_request(600,400)
+        navBar = NavigationToolbar(figCanvas)
+
+        self.boxPreview.append(figCanvas)
+        self.boxPreview.append(navBar)
 
     # When the application is launched…
     def on_activate(self, app):
         builder = Gtk.Builder()
         builder.add_from_file(path.join(path.dirname(__file__) , "ui/camada.ui"))
 
-        # get objects reference
+        # Get objects reference
         self.win = builder.get_object("winMain")
         self.entryTemDeBits = builder.get_object("entryTemDeBits")
         self.chkBtnContagemCaracteres = builder.get_object("chkBtnContagemCaracteres")
@@ -106,16 +149,19 @@ class MyApp(Gtk.Application):
         self.btnSubmit = builder.get_object("btnSubmit")
         self.boxPreview = builder.get_object("boxPreview")
 
-        # connect signals
-        self.chkBtnContagemCaracteres.connect("toggled", self.on_toggle_enquadramento, self.Enquadramento.CONTAGEM_CARACTERES)
-        self.chkBtnInsercaoBits.connect("toggled", self.on_toggle_enquadramento, self.Enquadramento.INSERCAO_BITS)
-        self.chkBtnNRZPolar.connect("toggled", self.on_toggle_mDigital, self.ModulacaoDigital.NRZ_POLAR)
-        self.chkBtnManchester.connect("toggled", self.on_toggle_mDigital, self.ModulacaoDigital.MANCHESTER)
-        self.chkBtnBipolar.connect("toggled", self.on_toggle_mDigital, self.ModulacaoDigital.BIPOLAR)
-        self.chkBtnASK.connect("toggled", self.on_toggle_mPortadora, self.ModulacaoPortadora.ASK)
-        self.chkBtnFSK.connect("toggled", self.on_toggle_mPortadora, self.ModulacaoPortadora.FSK)
-        self.chkBtn8QAM.connect("toggled", self.on_toggle_mPortadora, self.ModulacaoPortadora._8QAM)
-        self.btnSubmit.connect("clicked", self.on_submit)
+        # Connect signals
+        self.chkBtnContagemCaracteres.connect("toggled", self.on_toggle_enquadramento, Enquadramento.CONTAGEM_CARACTERES)
+        self.chkBtnInsercaoBits.connect("toggled", self.on_toggle_enquadramento, Enquadramento.INSERCAO_BITS)
+        self.chkBtnNRZPolar.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.NRZ_POLAR)
+        self.chkBtnManchester.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.MANCHESTER)
+        self.chkBtnBipolar.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.BIPOLAR)
+        self.chkBtnASK.connect("toggled", self.on_toggle_mPortadora, ModulacaoPortadora.ASK)
+        self.chkBtnFSK.connect("toggled", self.on_toggle_mPortadora, ModulacaoPortadora.FSK)
+        self.chkBtn8QAM.connect("toggled", self.on_toggle_mPortadora, ModulacaoPortadora.QAM_8)
+        self.btnSubmit.connect("clicked", self.graph_canvas_update)
+
+        # Add a canvas where to plot graphs
+        self.graph_canvas_show()
 
         self.win.set_application(self)  # Application will close if it has no active windows attached to it
         self.win.present()
