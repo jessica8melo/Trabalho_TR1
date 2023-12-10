@@ -4,24 +4,27 @@
   <ui>
 	(1,None,"camada.ui","camada.ui",None,None,None,None,None,None,None)
   </ui>
+  <ui_library>
+	(1,"gtk","4.0",None)
+  </ui_library>
   <object>
-	(1,1,"GtkApplicationWindow","mainWindow",None,None,None,None,-1,None),
+	(1,1,"GtkApplicationWindow","winMain",None,None,None,None,-1,None),
 	(1,2,"GtkBox",None,1,None,None,None,-1,None),
-	(1,4,"GtkBox","options",2,None,None,None,-1,None),
-	(1,5,"GtkEntry",None,4,None,None,None,None,None),
+	(1,4,"GtkBox","boxOptions",2,None,None,None,-1,None),
+	(1,5,"GtkEntry","entryTemDeBits",4,None,None,None,None,None),
 	(1,6,"GtkLabel",None,4,None,None,None,1,None),
-	(1,7,"GtkCheckButton","enquad",4,None,None,None,2,""),
-	(1,8,"GtkCheckButton",None,4,None,None,None,3,None),
-	(1,9,"GtkCheckButton","m-dig",4,None,None,None,5,None),
-	(1,10,"GtkCheckButton",None,4,None,None,None,6,None),
-	(1,11,"GtkCheckButton",None,4,None,None,None,7,None),
+	(1,7,"GtkCheckButton","chkBtnContagemCaracteres",4,None,None,None,2,""),
+	(1,8,"GtkCheckButton","chkBtnInsercaoBits",4,None,None,None,3,None),
+	(1,9,"GtkCheckButton","chkBtnNRZPolar",4,None,None,None,5,None),
+	(1,10,"GtkCheckButton","chkBtnManchester",4,None,None,None,6,None),
+	(1,11,"GtkCheckButton","chkBtnBipolar",4,None,None,None,7,None),
 	(1,12,"GtkLabel",None,4,None,None,None,8,None),
-	(1,13,"GtkCheckButton",None,4,None,None,None,11,None),
-	(1,14,"GtkCheckButton",None,4,None,None,None,9,None),
-	(1,15,"GtkCheckButton",None,4,None,None,None,10,None),
+	(1,13,"GtkCheckButton","chkBtn8QAM",4,None,None,None,11,None),
+	(1,14,"GtkCheckButton","chkBtnASK",4,None,None,None,9,None),
+	(1,15,"GtkCheckButton","chkBtnFSK",4,None,None,None,10,None),
 	(1,16,"GtkLabel",None,4,None,None,None,4,None),
-	(1,17,"GtkButton",None,4,None,None,None,12,None),
-	(1,18,"GtkBox","preview",2,None,None,None,-1,None),
+	(1,17,"GtkButton","btnSubmit",4,None,None,None,12,None),
+	(1,18,"GtkBox","boxPreview",2,None,None,None,-1,None),
 	(1,19,"GtkLabel",None,18,None,None,None,None,None),
 	(1,20,"GtkSettings",None,None,None,None,None,-1,None)
   </object>
@@ -38,13 +41,17 @@
 	(1,4,"GtkOrientable","orientation","vertical",None,None,None,None,None,None,None,None,None),
 	(1,4,"GtkWidget","halign","center",None,None,None,None,None,None,None,None,None),
 	(1,4,"GtkWidget","valign","center",None,None,None,None,None,None,None,None,None),
+	(1,5,"GtkEntry","input-hints","lowercase",None,None,None,None,None,None,None,None,None),
+	(1,5,"GtkEntry","input-purpose","digits",None,None,None,None,None,None,None,None,None),
 	(1,5,"GtkEntry","placeholder-text","trem de bits",None,None,None,None,None,None,None,None,None),
 	(1,6,"GtkLabel","label","Enquadramento",None,None,None,None,None,None,None,None,None),
 	(1,6,"GtkWidget","margin-bottom","10",None,None,None,None,None,None,None,None,None),
 	(1,6,"GtkWidget","margin-top","10",None,None,None,None,None,None,None,None,None),
+	(1,7,"GtkCheckButton","active","True",None,None,None,None,None,None,None,None,None),
 	(1,7,"GtkCheckButton","label","Contagem de caracteres",None,None,None,None,None,None,None,None,None),
 	(1,8,"GtkCheckButton","group","7",None,None,None,None,None,None,None,None,None),
 	(1,8,"GtkCheckButton","label","Inserção de bits",None,None,None,None,None,None,None,None,None),
+	(1,9,"GtkCheckButton","active","True",None,None,None,None,None,None,None,None,None),
 	(1,9,"GtkCheckButton","label","NRZ-Polar",None,None,None,None,None,None,None,None,None),
 	(1,10,"GtkCheckButton","group","9",None,None,None,None,None,None,None,None,None),
 	(1,10,"GtkCheckButton","label","Manchester",None,None,None,None,None,None,None,None,None),

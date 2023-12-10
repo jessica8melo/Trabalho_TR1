@@ -2,8 +2,8 @@
 <!-- Created with Cambalache 0.17.0 -->
 <interface>
   <!-- interface-name camada.ui -->
-  <requires lib="gtk" version="4.6"/>
-  <object class="GtkApplicationWindow" id="mainWindow">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkApplicationWindow" id="winMain">
     <property name="icon-name">network-wired</property>
     <property name="title">Camada Física e Enlace</property>
     <child>
@@ -14,14 +14,16 @@
         <property name="margin-top">10</property>
         <property name="spacing">10</property>
         <child>
-          <object class="GtkBox" id="options">
+          <object class="GtkBox" id="boxOptions">
             <property name="halign">center</property>
             <property name="homogeneous">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">2</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="entryTemDeBits">
+                <property name="input-hints">lowercase</property>
+                <property name="input-purpose">digits</property>
                 <property name="placeholder-text">trem de bits</property>
               </object>
             </child>
@@ -33,14 +35,15 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="enquad">
+              <object class="GtkCheckButton" id="chkBtnContagemCaracteres">
+                <property name="active">True</property>
                 <property name="label">Contagem de caracteres</property>
                 <!-- Custom fragments -->
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
-                <property name="group">enquad</property>
+              <object class="GtkCheckButton" id="chkBtnInsercaoBits">
+                <property name="group">chkBtnContagemCaracteres</property>
                 <property name="label">Inserção de bits</property>
               </object>
             </child>
@@ -52,19 +55,20 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="m-dig">
+              <object class="GtkCheckButton" id="chkBtnNRZPolar">
+                <property name="active">True</property>
                 <property name="label">NRZ-Polar</property>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
-                <property name="group">m-dig</property>
+              <object class="GtkCheckButton" id="chkBtnManchester">
+                <property name="group">chkBtnNRZPolar</property>
                 <property name="label">Manchester</property>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
-                <property name="group">m-dig</property>
+              <object class="GtkCheckButton" id="chkBtnBipolar">
+                <property name="group">chkBtnNRZPolar</property>
                 <property name="label">Bipolar</property>
               </object>
             </child>
@@ -76,22 +80,22 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="chkBtnASK">
                 <property name="label">Amplitude Shift Keying (ASK)</property>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="chkBtnFSK">
                 <property name="label"> Frequency Shift Keying (FSK);</property>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="chkBtn8QAM">
                 <property name="label">8-Quadrature Amplitude Modulation (8-QAM)</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="btnSubmit">
                 <property name="label">OK</property>
                 <property name="margin-top">10</property>
               </object>
@@ -99,7 +103,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="preview">
+          <object class="GtkBox" id="boxPreview">
             <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="valign">baseline-center</property>
