@@ -14,7 +14,7 @@ from enum import Enum, auto
 
 class Enquadramento(Enum):
     CONTAGEM_CARACTERES = auto()
-    INSERCAO_BITS = auto()
+    INSERCAO_CARACTERES = auto()
 
 class ModulacaoDigital(Enum):
     NRZ_POLAR = auto()
@@ -31,19 +31,38 @@ class MyApp(Gtk.Application):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)
         self.settings = {
-            Enquadramento: Enquadramento.CONTAGEM_CARACTERES,
-            ModulacaoDigital: ModulacaoDigital.NRZ_POLAR,
+            Enquadramento: None,
+            ModulacaoDigital: None,
             ModulacaoPortadora: []
         }
 
     def graph_canvas_update(self, widget):
-        txtBuffer = self.entryTemDeBits.get_buffer()
+        txtObtido = self.entryEntradaDados.get_buffer().get_text()
 
         # toDo: enquadramento do trem de bits
-        if len(txtBuffer.get_text()) < 1:
+        if len(txtObtido) < 1:
             return
+        elif self.settings[Enquadramento] == Enquadramento.CONTAGEM_CARACTERES:
+            listaBytes = contagem_caractere(txtObtido)
+        elif self.settings[Enquadramento] == Enquadramento.INSERCAO_CARACTERES:
+            listaBytes = insercao_caractere(txtObtido)
         else:
-            txtEnquadrado = txtBuffer.get_text()
+            self.txtVwQuadros.get_buffer().set_text("← favor, escolha algo")
+            return
+
+        # Show bits on txtView
+        if "listaBytes" in locals() and len(listaBytes) > 0:
+            # Converte numa string de bits com formato 00000000
+            txtEnquadrado = "".join(f"{ord(x):08b}" for x in listaBytes)
+
+            self.txtVwQuadros.get_buffer().set_text(
+                # Mostra num formato de list
+                "['" + "', '".join(listaBytes) + "']\n\n"
+                # Mostra no formato string de bits
+                + txtEnquadrado
+            )
+        else:
+            return
 
         # Calc digital modulation
         match self.settings[ModulacaoDigital]:
@@ -62,19 +81,20 @@ class MyApp(Gtk.Application):
                 case ModulacaoPortadora.FSK:
                     yFSK = fsk(txtEnquadrado)
                 case ModulacaoPortadora.QAM_8:
-                    yQAM_8 = qam_8(txtEnquadrado)
-
-        # Define the x-axis for all axes (graphs)
-        x = np.arange(0,len(txtEnquadrado),.01)
+                    (x1, yQAM_8) = qam_8(txtEnquadrado)
 
         # Check if "fig" is defined on self
         if hasattr(self, "fig"):
+            # Define the x-axis for all axes (graphs)
+            x = np.arange(0, len(txtEnquadrado), .01)
+
             # Clear graphs axes
             self.axModulacaoDigital.clear()
             self.axModulacaoPortadora.clear()
 
             self.axModulacaoDigital.set_title("Digital")
             self.axModulacaoPortadora.set_title("Analógica")
+            self.axModulacaoPortadora.xaxis.grid(linestyle="--")
             self.axModulacaoDigital.sharex = True
             self.axModulacaoPortadora.sharex = True
 
@@ -83,12 +103,15 @@ class MyApp(Gtk.Application):
             if "yMD" in locals() and yMD is not None:
                 self.axModulacaoDigital.plot(x, yMD)
             if "yASK" in locals() and yASK is not None:
-                self.axModulacaoPortadora.plot(x, yASK)
+                self.axModulacaoPortadora.plot(x, yASK, color="red", label="ASK")
             if "yFSK" in locals() and yFSK is not None:
-                self.axModulacaoPortadora.plot(x, yFSK)
+                self.axModulacaoPortadora.plot(x, yFSK, color="green", label="FSK")
             if "yQAM_8" in locals() and yQAM_8 is not None:
-                self.axModulacaoPortadora.plot(x, yQAM_8)
+                self.axModulacaoPortadora.plot(x1, yQAM_8, color="blue", label="8-QAM")
 
+            # Show signals lables
+            if len(self.settings[ModulacaoPortadora]) > 0:
+                self.axModulacaoPortadora.legend(loc="upper right")
             # Draw changes on axes into canvas
             self.fig.canvas.draw()
 
@@ -124,7 +147,7 @@ class MyApp(Gtk.Application):
         self.axModulacaoPortadora = self.fig.add_subplot(2, 1, 2)
 
         figCanvas = FigureCanvas(self.fig)
-        figCanvas.set_size_request(600,400)
+        figCanvas.set_size_request(600,500)
         navBar = NavigationToolbar(figCanvas)
 
         self.boxPreview.append(figCanvas)
@@ -137,9 +160,9 @@ class MyApp(Gtk.Application):
 
         # Get objects reference
         self.win = builder.get_object("winMain")
-        self.entryTemDeBits = builder.get_object("entryTemDeBits")
+        self.entryEntradaDados = builder.get_object("entryEntradaDados")
         self.chkBtnContagemCaracteres = builder.get_object("chkBtnContagemCaracteres")
-        self.chkBtnInsercaoBits = builder.get_object("chkBtnInsercaoBits")
+        self.chkBtnInsercaoCaracteres = builder.get_object("chkBtnInsercaoCaracteres")
         self.chkBtnNRZPolar = builder.get_object("chkBtnNRZPolar")
         self.chkBtnManchester = builder.get_object("chkBtnManchester")
         self.chkBtnBipolar = builder.get_object("chkBtnBipolar")
@@ -148,10 +171,11 @@ class MyApp(Gtk.Application):
         self.chkBtn8QAM = builder.get_object("chkBtn8QAM")
         self.btnSubmit = builder.get_object("btnSubmit")
         self.boxPreview = builder.get_object("boxPreview")
+        self.txtVwQuadros = builder.get_object("txtVwQuadros")
 
         # Connect signals
         self.chkBtnContagemCaracteres.connect("toggled", self.on_toggle_enquadramento, Enquadramento.CONTAGEM_CARACTERES)
-        self.chkBtnInsercaoBits.connect("toggled", self.on_toggle_enquadramento, Enquadramento.INSERCAO_BITS)
+        self.chkBtnInsercaoCaracteres.connect("toggled", self.on_toggle_enquadramento, Enquadramento.INSERCAO_CARACTERES)
         self.chkBtnNRZPolar.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.NRZ_POLAR)
         self.chkBtnManchester.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.MANCHESTER)
         self.chkBtnBipolar.connect("toggled", self.on_toggle_mDigital, ModulacaoDigital.BIPOLAR)

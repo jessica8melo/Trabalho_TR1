@@ -21,10 +21,12 @@
             <property name="spacing">2</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkEntry" id="entryTemDeBits">
+              <object class="GtkEntry" id="entryEntradaDados">
                 <property name="input-hints">lowercase</property>
-                <property name="input-purpose">digits</property>
-                <property name="placeholder-text">trem de bits</property>
+                <property name="input-purpose">alpha</property>
+                <property name="placeholder-text">Entrada de dados</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
               </object>
             </child>
             <child>
@@ -36,15 +38,14 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="chkBtnContagemCaracteres">
-                <property name="active">True</property>
                 <property name="label">Contagem de caracteres</property>
                 <!-- Custom fragments -->
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="chkBtnInsercaoBits">
+              <object class="GtkCheckButton" id="chkBtnInsercaoCaracteres">
                 <property name="group">chkBtnContagemCaracteres</property>
-                <property name="label">Inserção de bits</property>
+                <property name="label">Inserção de caracteres</property>
               </object>
             </child>
             <child>
@@ -56,7 +57,6 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="chkBtnNRZPolar">
-                <property name="active">True</property>
                 <property name="label">NRZ-Polar</property>
               </object>
             </child>
@@ -96,7 +96,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnSubmit">
-                <property name="label">OK</property>
+                <property name="label">Atualizar ⟳ </property>
                 <property name="margin-top">10</property>
               </object>
             </child>
@@ -109,9 +109,15 @@
             <property name="valign">baseline-center</property>
             <property name="width-request">400</property>
             <child>
-              <object class="GtkLabel">
-                <property name="justify">center</property>
-                <property name="label">Chart will be shown here (:</property>
+              <object class="GtkTextView" id="txtVwQuadros">
+                <property name="editable">False</property>
+                <property name="input-purpose">digits</property>
+                <property name="justification">center</property>
+                <property name="margin-bottom">10</property>
+                <property name="margin-top">10</property>
+                <property name="monospace">True</property>
+                <property name="valign">start</property>
+                <property name="wrap-mode">word-char</property>
               </object>
             </child>
           </object>
