@@ -115,8 +115,8 @@ class MyApp(Gtk.Application):
         # Create a new figure with 100 dots per inch
         # and set a subscript title
         self.fig = Figure(dpi=100)
-        self.fig.suptitle("Modulações")
-        self.fig.subplots_adjust(hspace=.6)
+        self.fig.suptitle("Modulações", fontsize="x-large", fontweight="bold")
+        self.fig.subplots_adjust(top=.85, hspace=.5)
 
         # Define a new axes to plot digital modulation
         self.axModulacaoDigital = self.fig.add_subplot(2, 1, 1)
