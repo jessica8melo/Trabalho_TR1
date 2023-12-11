@@ -44,3 +44,21 @@ def insercao_caractere(entrada):
     lista.append('&')
     
     return(lista)
+
+def add_bit_paridade_par(bits):
+    if bits.count('1')%2 == 0:
+        bits = bits + '0'
+    else:
+        bits = bits + '1'
+    return bits
+
+def paridade_par(bits_entrada, bits_saida):
+    mensagem_transmitida = add_bit_paridade_par(bits_entrada)
+    recalculo_entrada = add_bit_paridade_par(mensagem_transmitida[:-1])
+    mensagem_recebida = add_bit_paridade_par(bits_saida)
+    recalculo_saida = add_bit_paridade_par(mensagem_recebida[:-1])
+
+    if recalculo_saida == recalculo_entrada:
+        return("Sem erros, parça ;)")
+    else:
+        return("Errou, errou feio, errou rude")
