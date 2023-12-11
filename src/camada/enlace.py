@@ -3,46 +3,44 @@
 # ---------- Protocolos de Enquadramento de Dados ----------
 
 def contagem_caractere(entrada):
-    quadros = []
-    aux = 0 # posição do caractere referenciado
-    erro = False # verifica se deu erro na transmissao
-    cabecalhos = []
-    while aux < len(entrada) - 1 and erro == False:
-        if entrada[aux].isnumeric() == True:
-            cabecalho = int(entrada[aux])
-            cabecalhos.append(cabecalho)
-            print(cabecalho)
-            quadro = []
-            aux += 1
-            for i in range(cabecalho) :
-                if aux < len(entrada):
-                    quadro += entrada[aux]
-                    aux += 1
-                else:
-                    erro = True
-            quadros.append(quadro)
-            print(quadro)
-        else:
-            erro = True
+    lista = []
+    for char in entrada:
+        lista.append(char)
+    if len(lista) <= 6:
+        lista.insert(0,len(lista))
+    else:
+        aux1 = len(entrada) % 6
+        aux2 = len(entrada) // 6 - 1
+        lista.insert(0,6)
+        if aux1 != 0:
+            lista.insert(-aux1, aux1)
+        if aux2 > 1:
+            while aux2 > 0:
+                lista.insert(aux2*6 + 1,6)
+                aux2 -= 1
     
-    return(quadros, cabecalhos, erro)
+    return(lista)
 
 
-def insercao(entrada):
-    quadros = []
-    aux = 1 # posição do caractere referenciado
-    erro = False # verifica se deu erro na transmissao
-    flag = entrada[0]
-    if entrada[-1] != flag:
-            erro = True
-    while aux < len(entrada) and erro == False:
-        quadro = []
-        while entrada[aux] != flag and aux < len(entrada):
-            quadro.append(entrada[aux])
-            aux += 1
-        quadros.append(quadro)
-        if aux != len(entrada) - 1 and entrada[aux+1] != flag:
-            erro = True
-        aux += 2
+def insercao_caractere(entrada):
+    lista = []
+    for char in entrada:
+        lista.append(char)
+    if len(lista) <= 6:
+        lista.insert(0,'&')
+
+    else:
+        aux1 = len(entrada) % 6
+        aux2 = len(entrada) // 6 - 1
+        lista.insert(0,'&')
+        if aux1 != 0:
+            lista.insert(-aux1, '&')
+            lista.insert(-aux1, '&')
+        if aux2 > 1:
+            while aux2 > 0:
+                lista.insert(aux2*6 + 1,'&')
+                lista.insert(aux2*6 + 1,'&')
+                aux2 -= 1
+    lista.append('&')
     
-    return(quadros,flag,erro)
+    return(lista)
