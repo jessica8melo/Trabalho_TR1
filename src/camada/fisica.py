@@ -1,17 +1,17 @@
 import numpy as np
 
 def nrz_polar(entrada): #Bit '1' é V e bit '0' é -V, sendo |V|=1
-    x = np.arange(0,len(entrada),.01)   #Eixo X vai de 0 até
+    x = np.arange(0,len(entrada),.01)   #Eixo X vai de 0 até o final da entrada
     aux_index = 1 #Serve para analisar se percorreu-se toda unidade do eixo X antes de ir para o próximo bit de entrada
     y = []
     for i in range(0,len(entrada)*100,1):
-        if x[i]<aux_index: #Ainda não percorreu
+        if x[i]<aux_index: #Condição para caso ainda não percorreu
             if entrada[aux_index-1] == "1":
                 saida = 1
             else:
                 saida = -1
             y.append(saida)
-        else: #Já percorreu
+        else: #Condição para caso já percorreu, marcando a mudança para o próximo bit
             if entrada[aux_index] == "1":
                 saida = 1
             else:
@@ -78,25 +78,25 @@ def manchester(entrada):
 def ask(entrada): #Quando o bit é igual a '1', a amplitude é 1 e quando é igual a '0', a amplitude é 0
     y = []
 
-    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e da frequência de entrada
+    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude de entrada
         if entrada[i] == "1":
             for j in range(0, 100):
-                y.append(1 * np.sin(2*np.pi*j*0.01))
+                y.append(1 * np.sin(2*np.pi*j*0.01)) #Amplitude igual a um
         else:
             for j in range(0, 100):
-                y.append(0)
+                y.append(0) #Amplitude igual a zero
     return y
 
 def fsk(entrada): #Quando o bit é igual a '1', a frequência é 2, já quando o bit for '0', a frequência é 1
     y = []
 
-    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da amplitude e das respectivas frequência
+    for i in range(0,len(entrada)): #Cria a função senoidal de saída a partir da frequência de entrada
         if entrada[i] == "1":
             for j in range(0, 100):
-                y.append(1 * np.sin(2*np.pi*2*j*0.01))
+                y.append(1 * np.sin(2*np.pi*2*j*0.01)) #Dobro da frequência
         else:
             for j in range(0, 100):
-                y.append(1 * np.sin(2*np.pi*j*0.01))
+                y.append(1 * np.sin(2*np.pi*j*0.01)) #Frequência igual a 1
     return y
 
 def qam_8(entrada):
