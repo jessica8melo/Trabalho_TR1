@@ -52,13 +52,12 @@ class MyApp(Gtk.Application):
 
         # Show bits on txtView
         if "listaBytes" in locals() and len(listaBytes) > 0:
-            # Converte numa string de bits com formato 00000000
-            txtEnquadrado = "".join(f"{ord(x):08b}" for x in listaBytes)
+            txtEnquadrado = lista_para_string_bits(listaBytes)
 
             self.txtVwQuadros.get_buffer().set_text(
-                # Mostra num formato de list
+                # Mostra texto enquadrado no formato de lista
                 "['" + "', '".join(listaBytes) + "']\n\n"
-                # Mostra no formato string de bits
+                # Mostra texto enquadrado no formato string de bits
                 + txtEnquadrado
             )
         else:

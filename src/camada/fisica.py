@@ -103,7 +103,7 @@ def qam_8(entrada):
     # Adiciona bytes nulo "\x0" garantindo um quadro divisível em símbolos de 3 bits
     entrada = (len(entrada) % 3)*"00000000" + entrada
     # Converte a entrada num array
-    arrayDados = np.frombuffer(entrada.encode("ASCII"), dtype=np.uint8) - ord("0")
+    arrayDados = np.frombuffer(entrada.encode("UTF-8"), dtype=np.uint8) - ord("0")
     simbolo = 0
     amplitude = 0
     fase = 0
