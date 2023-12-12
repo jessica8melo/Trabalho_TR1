@@ -1,12 +1,39 @@
-# Trabalho_TR1
+# Simulador da camada física e de enlace do modelo OSI
 
-Para executar o programa:
+Projeto proposto na disciplina de **Teleinformática e Redes** do [**Departamento de Ciência da Computação**](https://cic.unb.br/) da [**Universidade Federal de Brasília**](https://www.unb.br/).
 
-1) Baixe as seguintes bibliotecas em Python:
-    - matplotlib 3.8.0 (https://matplotlib.org/)
-    - numpy 1.26.2 (https://numpy.org/)
-    - PyGObject 3.46.0 (https://www.gtk.org/docs/language-bindings/python/)
+## Camada física
+Possui as modulações digitais:
+- Non-return to Zero Polar (NRZ-Polar)
+- Manchester
+- Bipolar
 
-2) Confirme se a toolkit GTK (https://www.gtk.org) está instalada e funcionando
+E as modulações por portadora
+- Amplitude Shift Keying (ASK)
+- Frequency Shift Keying (FSK)
+- 8-Quadrature Amplitude Modulation (8-QAM)
 
-3) Execute o arquivo "main.py"
+## Camada de enlace
+Enquadramento por
+- Contagem de caracteres
+- Inserção de caracteres
+
+Protocolos de detecção de erros [a ser implementado]
+- Bit de paridade par
+- CRC (polinômio CRC-32, IEEE 802)
+
+Protocolo de correção de erros [a ser implementado]
+- Hamming
+
+## Requisitos para execução
+- [Python v3.10+](https://www.python.org/)
+- [Matplotlib v3.7+](https://matplotlib.org/) - gráficos
+- [Numpy v1.20+](https://numpy.org/) - manipulação de número
+- [PyGobject v3.40+](https://www.gtk.org/docs/language-bindings/python/)
+- [Gtk v4.0+](https://www.gtk.org/) - interface gráfica
+
+## Como iniciar?
+Basta executar o arquivo "main.py"
+
+## License
+This project is licensed under the terms of the [MIT](https://choosealicense.com/licenses/mit/) license.
